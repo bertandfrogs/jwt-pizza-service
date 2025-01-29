@@ -31,6 +31,14 @@ authRouter.endpoints = [
   },
   {
     method: 'DELETE',
+    path: '/api/auth/:userId',
+    requiresAuth: true,
+    description: 'Deletes a user',
+    example: `curl -X DELETE localhost:3000/api/auth/1 -d '{"email":"a@jwt.com", "password":"admin"}' -H 'Content-Type: application/json' -H 'Authorization: Bearer tttttt'`,
+    response: { message: 'user deletion successful' },
+  },
+  {
+    method: 'DELETE',
     path: '/api/auth',
     requiresAuth: true,
     description: 'Logout a user',
@@ -113,6 +121,23 @@ authRouter.put(
     const updatedUser = await DB.updateUser(userId, email, password);
     res.json(updatedUser);
   })
+);
+
+// delete user
+authRouter.delete(
+	'/:userId',
+	authRouter.authenticateToken,
+	asyncHandler(async (req, res) => {
+	  const userId = Number(req.params.userId);
+	  const user = req.user;
+	  if (user.id !== userId && !user.isRole(Role.Admin)) {
+		return res.status(403).json({ message: 'unauthorized' });
+	  }
+	  
+	  await DB.deleteUser(userId);
+	  await clearAuth(req);
+	  res.json({ message: 'user deletion successful' });
+	})
 );
 
 async function setAuth(user) {

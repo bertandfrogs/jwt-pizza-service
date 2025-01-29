@@ -36,7 +36,7 @@ const tableCreateStatements = [
     userId INT NOT NULL,
     role VARCHAR(255) NOT NULL,
     objectId INT NOT NULL,
-    FOREIGN KEY (userId) REFERENCES user(id),
+    FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE,
     INDEX (objectId)
   )`,
 
@@ -57,7 +57,7 @@ const tableCreateStatements = [
     menuId INT NOT NULL,
     description VARCHAR(255) NOT NULL,
     price DECIMAL(10, 8) NOT NULL,
-    FOREIGN KEY (orderId) REFERENCES dinerOrder(id),
+    FOREIGN KEY (orderId) REFERENCES dinerOrder(id) ON DELETE CASCADE,
     INDEX (menuId)
   )`,
 ];
