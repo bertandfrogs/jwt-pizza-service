@@ -1,6 +1,6 @@
 const stRequest = require("supertest");
 const app = require("../../src/service");
-const formatAuthHeader = require("../test-utils");
+const formatAuthHeader = require("../formatAuthHeader");
 
 let testUser = { name: "pizza diner", email: "reg@test.com", password: "a" };
 let registerRes;

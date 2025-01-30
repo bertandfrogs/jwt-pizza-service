@@ -23,6 +23,14 @@ orderRouter.endpoints = [
     response: [{ id: 1, title: 'Student', description: 'No topping, no sauce, just carbs', image: 'pizza9.png', price: 0.0001 }],
   },
   {
+    method: 'DELETE',
+    path: '/api/order/menu/:id',
+    requiresAuth: true,
+    description: 'Delete an item from the menu',
+    example: `curl -X DELETE localhost:3000/api/order/menu -H 'Content-Type: application/json' -d '{ "title":"Student", "description": "No topping, no sauce, just carbs", "image":"pizza9.png", "price": 0.0001 }'  -H 'Authorization: Bearer tttttt'`,
+    response: { message: 'successfully deleted menu item' }
+  },
+  {
     method: 'GET',
     path: '/api/order',
     requiresAuth: true,
@@ -34,9 +42,17 @@ orderRouter.endpoints = [
     method: 'POST',
     path: '/api/order',
     requiresAuth: true,
-    description: 'Create a order for the authenticated user',
+    description: 'Create an order for the authenticated user',
     example: `curl -X POST localhost:3000/api/order -H 'Content-Type: application/json' -d '{"franchiseId": 1, "storeId":1, "items":[{ "menuId": 1, "description": "Veggie", "price": 0.05 }]}'  -H 'Authorization: Bearer tttttt'`,
     response: { order: { franchiseId: 1, storeId: 1, items: [{ menuId: 1, description: 'Veggie', price: 0.05 }], id: 1 }, jwt: '1111111111' },
+  },
+  {
+    method: 'DELETE',
+    path: '/api/order/:id',
+    requiresAuth: true,
+    description: 'Delete an order for the authenticated user',
+    example: `curl -X DELETE localhost:3000/api/order -H 'Authorization: Bearer tttttt'`,
+    response: { message: 'successfully deleted order item' },
   },
 ];
 
