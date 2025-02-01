@@ -23,14 +23,6 @@ orderRouter.endpoints = [
     response: [{ id: 1, title: 'Student', description: 'No topping, no sauce, just carbs', image: 'pizza9.png', price: 0.0001 }],
   },
   {
-    method: 'DELETE',
-    path: '/api/order/menu/:id',
-    requiresAuth: true,
-    description: 'Delete an item from the menu',
-    example: `curl -X DELETE localhost:3000/api/order/menu -H 'Content-Type: application/json' -d '{ "title":"Student", "description": "No topping, no sauce, just carbs", "image":"pizza9.png", "price": 0.0001 }'  -H 'Authorization: Bearer tttttt'`,
-    response: { message: 'successfully deleted menu item' }
-  },
-  {
     method: 'GET',
     path: '/api/order',
     requiresAuth: true,
@@ -70,7 +62,7 @@ orderRouter.put(
   authRouter.authenticateToken,
   asyncHandler(async (req, res) => {
     if (!req.user.isRole(Role.Admin)) {
-      throw new StatusCodeError('unable to add menu item', 403);
+      throw new StatusCodeError('not authorized to add menu item', 403);
     }
 
     const addMenuItemReq = req.body;

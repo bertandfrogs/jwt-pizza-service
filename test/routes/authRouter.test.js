@@ -1,6 +1,7 @@
 const stRequest = require("supertest");
 const app = require("../../src/service");
 const formatAuthHeader = require("../formatAuthHeader");
+const randomName = require("../randomName");
 
 let testUser = { name: "pizza diner", email: "reg@test.com", password: "a" };
 let registerRes;
@@ -9,7 +10,7 @@ let testUserAuthToken;
 
 // register a user to use in all tests
 beforeAll(async () => {
-	testUser.email = Math.random().toString(36).substring(2, 12) + "@test.com";
+	testUser.email = randomName() + "@test.com";
 	registerRes = await stRequest(app).post("/api/auth").send(testUser);
 	testUserId = registerRes.body.user.id;
 	testUserAuthToken = registerRes.body.token;
