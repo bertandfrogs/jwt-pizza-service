@@ -64,4 +64,5 @@ test("add menu item", async () => {
 test("add menu item without authorization", async () => {
 	const addMenuResponse = await stRequest(app).put("/api/order/menu").send(testMenuItem).set(formatAuthHeader(testUserAuthToken));
 	expect(addMenuResponse.statusCode).toBe(403);
+	expect(addMenuResponse.body).toMatchObject({ message: 'not authorized to add menu item' });
 })
