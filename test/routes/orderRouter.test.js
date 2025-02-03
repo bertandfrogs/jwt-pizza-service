@@ -45,13 +45,13 @@ test("get menu", async () => {
 })
 
 test("create order", async () => {
-	const createResponse = await stRequest(app).post("/api/order/").send(testOrder).set(formatAuthHeader(testUserAuthToken));
+	const createResponse = await stRequest(app).post("/api/order").send(testOrder).set(formatAuthHeader(testUserAuthToken));
 	expect(createResponse.statusCode).toBe(200);
 	expect(createResponse.body.order).toMatchObject(testOrder);
 })
 
 test("get orders", async () => {
-	const getResponse = await stRequest(app).get("/api/order/").set(formatAuthHeader(testUserAuthToken));
+	const getResponse = await stRequest(app).get("/api/order").set(formatAuthHeader(testUserAuthToken));
 	expect(getResponse.statusCode).toBe(200);
 })
 
