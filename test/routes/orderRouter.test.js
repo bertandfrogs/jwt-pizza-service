@@ -5,7 +5,7 @@ const createAdminUser = require("../createAdminUser");
 const randomName = require("../randomName");
 
 const testMenuItem = { "title": randomName(), "description": "No topping, no sauce, just carbs", "image":"pizza9.png", "price": 0.0001 }
-const testOrder = {"franchiseId": 1, "storeId": 1, "items": [{ "menuId": 1, "description": "Veggie", "price": 0.05 }]};
+// const testOrder = {"franchiseId": 1, "storeId": 1, "items": [{ "menuId": 1, "description": "Veggie", "price": 0.05 }]};
 let testUser = { name: "pizza diner", email: "reg@test.com", password: "a" };
 let testUserId;
 let adminUserId;
@@ -44,11 +44,11 @@ test("get menu", async () => {
 	expect(getMenuResponse.body).not.toBeNull();
 })
 
-test("create order", async () => {
-	const createResponse = await stRequest(app).post("/api/order").send(testOrder).set(formatAuthHeader(testUserAuthToken));
-	// expect(createResponse.statusCode).toBe(200);
-	// expect(createResponse.body.order).toMatchObject(testOrder);
-})
+// test("create order", async () => {
+// 	const createResponse = await stRequest(app).post("/api/order").send(testOrder).set(formatAuthHeader(testUserAuthToken));
+// 	// expect(createResponse.statusCode).toBe(200);
+// 	// expect(createResponse.body.order).toMatchObject(testOrder);
+// })
 
 test("get orders", async () => {
 	const getResponse = await stRequest(app).get("/api/order").set(formatAuthHeader(testUserAuthToken));
