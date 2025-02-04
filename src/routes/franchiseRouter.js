@@ -33,7 +33,7 @@ franchiseRouter.endpoints = [
     method: 'DELETE',
     path: '/api/franchise/:franchiseId',
     requiresAuth: true,
-    description: `Delete a franchises`,
+    description: `Delete a franchise`,
     example: `curl -X DELETE localhost:3000/api/franchise/1 -H 'Authorization: Bearer tttttt'`,
     response: { message: 'franchise deleted' },
   },
@@ -113,8 +113,8 @@ franchiseRouter.post(
   asyncHandler(async (req, res) => {
     const franchiseId = Number(req.params.franchiseId);
     const franchise = await DB.getFranchise({ id: franchiseId });
-    if (!franchise || (!req.user.isRole(Role.Admin) && !franchise.admins.some((admin) => admin.id === req.user.id))) {
-      throw new StatusCodeError('unable to create a store', 403);
+    if (!franchise || !req.user.isRole(Role.Admin) || !franchise.admins.some((admin) => admin.id === req.user.id)) {
+		throw new StatusCodeError('unable to create a store', 403);
     }
 
     res.send(await DB.createStore(franchise.id, req.body));
