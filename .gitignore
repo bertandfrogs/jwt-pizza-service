@@ -5,3 +5,6 @@ config.js
 coverage
 dist
 cloudformation/*
+
+# Metrics
+/metrics/*
