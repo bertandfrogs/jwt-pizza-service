@@ -4,7 +4,5 @@
 config.js
 coverage
 dist
-cloudformation/*
-
-# Metrics
-/metrics/*
+cloudformation/
+metrics/
