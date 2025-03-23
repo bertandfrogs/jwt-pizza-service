@@ -81,6 +81,7 @@ class PizzaMetrics {
 	}
 
 	buildIndividualMetric(metricName, metricValue, metricUnit, metricType, valueType, attributes) {
+		attributes = { ...attributes, source: config.metrics.source };
 		const metric = {
 			name: metricName,
 			unit: metricUnit,
@@ -96,7 +97,7 @@ class PizzaMetrics {
 		}
 
 		Object.keys(attributes).forEach((key) => {
-			metric.dataPoints[0].attributes.push({
+			metric[metricType].dataPoints[0].attributes.push({
 				key: key,
 				value: { stringValue: attributes[key] },
 			});
@@ -153,10 +154,10 @@ class PizzaMetrics {
 	}
 
 	addDummyMetric(metrics) {
-		const dumb1 = this.buildIndividualMetric("dummy1", Math.random() * 100, "%", "gauge", "asFloat", {});
+		const dumb1 = this.buildIndividualMetric("dummy1", Math.floor(Math.random() * 100), "1", "sum", "asInt", {});
 		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(dumb1);
 
-		const dumb2 = this.buildIndividualMetric("dummy2", Math.random() * 100, "1", "sum", "asFloat", {});
+		const dumb2 = this.buildIndividualMetric("dummy2", Math.floor(Math.random() * 100), "1", "sum", "asInt", {});
 		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(dumb2);
 	}
 
