@@ -65,6 +65,22 @@ class PizzaMetrics {
 		next();
 	}
 
+	authTracker(authSuccessful) {
+		if (authSuccessful) {
+			this.auth.success++;
+		}
+		else {
+			this.auth.failure++;
+		}
+	}
+	
+	userTracker(modifier) {
+		this.auth.users += modifier;
+	}
+
+	factoryTracker() {
+
+	}
 	
 	buildMetricsObject() {
 		return {
@@ -141,8 +157,13 @@ class PizzaMetrics {
 		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(memMetric);
 	}
 
-	addAuthMetrics() {
-
+	addAuthMetrics(metrics) {
+		const authSuccessful = this.buildIndividualMetric("authSuccess", this.auth.success, "1", "sum", "asInt", {});
+		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(authSuccessful);
+		const authFailure = this.buildIndividualMetric("authFailure", this.auth.failure, "1", "sum", "asInt", {});
+		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(authFailure);
+		const activeUsers = this.buildIndividualMetric("activeUsers", this.auth.users, "1", "sum", "asInt", {});
+		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(activeUsers);
 	}
 
 	addPurchaseMetrics() {
@@ -160,6 +181,7 @@ class PizzaMetrics {
 				let metricObject = this.buildMetricsObject();
 				this.addHttpMetrics(metricObject);
 				this.addSystemMetrics(metricObject);
+				this.addAuthMetrics(metricObject);
 
 				this.sendMetricsToGrafana(metricObject);
 			} catch (error) {
@@ -200,4 +222,12 @@ const metricTracker = (req, res, next) => {
 	metrics.track(req, res, next);
 }
 
-module.exports = { metricTracker };
+const authAttemptTracker = (authSuccessful) => {
+	metrics.authTracker(authSuccessful);
+}
+
+const activeUserTracker = (modifier) => {
+	metrics.userTracker(modifier);
+}
+
+module.exports = { metricTracker, authAttemptTracker, activeUserTracker };
