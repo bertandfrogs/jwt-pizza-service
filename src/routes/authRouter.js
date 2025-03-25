@@ -86,7 +86,6 @@ authRouter.post(
     }
     const user = await DB.addUser({ name, email, password, roles: [{ role: Role.Diner }] });
     const auth = await setAuth(user);
-	activeUserTracker(1);
     res.json({ user: user, token: auth });
   })
 );
@@ -98,7 +97,6 @@ authRouter.put(
     const { email, password } = req.body;
     const user = await DB.getUser(email, password);
     const auth = await setAuth(user);
-	activeUserTracker(1);
     res.json({ user: user, token: auth });
   })
 );
@@ -109,7 +107,6 @@ authRouter.delete(
   authRouter.authenticateToken,
   asyncHandler(async (req, res) => {
     await clearAuth(req);
-	activeUserTracker(-1);
     res.json({ message: 'logout successful' });
   })
 );
@@ -151,12 +148,14 @@ authRouter.delete(
 async function setAuth(user) {
   const token = jwt.sign(user, config.jwtSecret);
   await DB.loginUser(user.id, token);
+  activeUserTracker(1);
   return token;
 }
 
 async function clearAuth(req) {
   const token = readAuthToken(req);
   if (token) {
+	activeUserTracker(-1);
     await DB.logoutUser(token);
   }
 }

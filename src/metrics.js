@@ -75,7 +75,12 @@ class PizzaMetrics {
 	}
 	
 	userTracker(modifier) {
-		this.auth.users += modifier;
+		if (this.auth.users <= 0) {
+			this.auth.users = 0;
+		}
+		else {
+			this.auth.users += modifier;
+		}
 	}
 
 	factoryTracker() {
@@ -228,6 +233,10 @@ const authAttemptTracker = (authSuccessful) => {
 
 const activeUserTracker = (modifier) => {
 	metrics.userTracker(modifier);
+}
+
+const factoryTracker = () => {
+
 }
 
 module.exports = { metricTracker, authAttemptTracker, activeUserTracker };
