@@ -8,7 +8,7 @@ const Logger = require("pizza-logger");
 class DB {
 	constructor() {
 		this.initialized = this.initializeDatabase();
-		this.logger = new Logger();
+		this.logger = new Logger(config);
 	}
 
 	async getMenu() {
