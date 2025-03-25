@@ -96,7 +96,7 @@ orderRouter.post(
       body: JSON.stringify({ diner: { id: req.user.id, name: req.user.name, email: req.user.email }, order }),
     });
     const j = await r.json();
-	logger.factoryLogger(JSON.stringify({ diner: { id: req.user.id, name: req.user.name, email: req.user.email }, order }));
+	logger.factoryLogger({ diner: { id: req.user.id, name: req.user.name, email: req.user.email }, order });
     if (r.ok) {
       res.send({ order, reportSlowPizzaToFactoryUrl: j.reportUrl, jwt: j.jwt });
     } else {

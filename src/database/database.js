@@ -443,7 +443,7 @@ class DB {
 	}
 
 	async query(connection, sql, params) {
-		this.logger.dbLogger(sql);
+		this.logger.dbLogger({"query": sql});
 		const [results] = await connection.execute(sql, params);
 		return results;
 	}
