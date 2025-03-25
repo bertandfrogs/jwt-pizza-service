@@ -83,9 +83,9 @@ class PizzaMetrics {
 		}
 	}
 
-	factoryTracker() {
+	// factoryTracker() {
 
-	}
+	// }
 	
 	buildMetricsObject() {
 		return {
@@ -235,8 +235,8 @@ const activeUserTracker = (modifier) => {
 	metrics.userTracker(modifier);
 }
 
-const factoryTracker = () => {
+// const factoryTracker = () => {
 
-}
+// }
 
 module.exports = { metricTracker, authAttemptTracker, activeUserTracker };
