@@ -120,8 +120,8 @@ class PizzaMetrics {
 		const totalMemory = os.totalmem();
 		const freeMemory = os.freemem();
 		const usedMemory = totalMemory - freeMemory;
-		const memoryUsage = (usedMemory / totalMemory) * 100;
-		return memoryUsage.toFixed(2);
+		const memoryUsage = (usedMemory / totalMemory);
+		return memoryUsage.toFixed(2) * 100;
 	}
 
 	addHttpMetrics(metrics) {
@@ -129,7 +129,7 @@ class PizzaMetrics {
 		methods.forEach((method) => {
 			const count = this.buildIndividualMetric(method, this.http[method], "1", "sum", "asInt", {});
 			metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(count);
-			const lat = this.buildIndividualMetric(`${method}_latency`, this.latency[method], "1", "sum", "asInt", {});
+			const lat = this.buildIndividualMetric(`${method}_latency`, this.latency[method], "ms", "sum", "asInt", {});
 			metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(lat);
 		});
 	}
@@ -153,14 +153,6 @@ class PizzaMetrics {
 
 	}
 
-	addDummyMetric(metrics) {
-		const dumb1 = this.buildIndividualMetric("dummy1", Math.floor(Math.random() * 100), "1", "sum", "asInt", {});
-		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(dumb1);
-
-		const dumb2 = this.buildIndividualMetric("dummy2", Math.floor(Math.random() * 100), "1", "sum", "asInt", {});
-		metrics.resourceMetrics[0].scopeMetrics[0].metrics.push(dumb2);
-	}
-
 	// send metrics to Grafana
 	sendMetricsPeriodically(period) {
 		setInterval(() => {
@@ -168,7 +160,6 @@ class PizzaMetrics {
 				let metricObject = this.buildMetricsObject();
 				this.addHttpMetrics(metricObject);
 				this.addSystemMetrics(metricObject);
-				this.addDummyMetric(metricObject);
 
 				this.sendMetricsToGrafana(metricObject);
 			} catch (error) {
