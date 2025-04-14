@@ -122,19 +122,24 @@ class DB {
 	async updateUser(userId, email, password) {
 		const connection = await this.getConnection();
 		try {
+			const fields = [];
 			const params = [];
 			if (password) {
 				const hashedPassword = await bcrypt.hash(password, 10);
-				params.push(`password='${hashedPassword}'`);
+				fields.push("password=?");
+				params.push(hashedPassword);
 			}
 			if (email) {
-				params.push(`email='${email}'`);
+				fields.push("email=?");
+				params.push(email);
 			}
-			if (params.length > 0) {
-				const query = `UPDATE user SET ${params.join(
-					", "
-				)} WHERE id=${userId}`;
-				await this.query(connection, query);
+			if (fields.length > 0) {
+				params.push(userId);
+				await this.query(
+					connection,
+					`UPDATE user SET ${fields.join(", ")} WHERE id=?`,
+					params
+				);
 			}
 			return this.getUser(email, password);
 		} finally {
@@ -251,9 +256,11 @@ class DB {
 		const connection = await this.getConnection();
 		try {
 			if (id) {
-				await this.query(connection, `DELETE FROM orderItem WHERE id=?`, [
-					id,
-				]);
+				await this.query(
+					connection,
+					`DELETE FROM orderItem WHERE id=?`,
+					[id]
+				);
 			}
 		} finally {
 			connection.end();
@@ -443,7 +450,7 @@ class DB {
 	}
 
 	async query(connection, sql, params) {
-		this.logger.dbLogger({"query": sql});
+		this.logger.dbLogger({ query: sql });
 		const [results] = await connection.execute(sql, params);
 		return results;
 	}
